@@ -1,13 +1,13 @@
 # STARS 2023 Design Final Project
 
-## [Team Name]
-* [Name]
-* [Name]
-* [Name]
-* [Name]
-* [TA]
+## SyntheSTARS
+* Diego Lopez
+* Emily
+* Michael
+* Steph
+* Aidan
 
-## [Project Name]
+## 13-Channel Simultaneous Synthesizer
 Description of functionality, how to use it, and any supporting equipment required
 
 ## Pin Layout
