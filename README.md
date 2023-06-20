@@ -11,6 +11,7 @@
 Description of functionality, how to use it, and any supporting equipment required
 
 ## Base Source Files
+Clock and nRst omitted from input lists.
 - keypad_encoder.sv              : Synchronizer and Edge Detector Module. Routes to FSM and 13 Oscillators.
   - Inputs: [14:0] keypad_i
   - Outputs: [12:0] keypad_s, modekey_edge, octave_edge
@@ -28,10 +29,10 @@ Description of functionality, how to use it, and any supporting equipment requir
   - Inputs: [7:0] quotient, [1:0] mode
   - Outputs: [7:0] sample
 - mixer.sv                       : Polyphonic wave mixer with sequential divider.
-  - Inputs: [12:0] [7:0] samples, [12:0] samples_enabled
+  - Inputs: enable, [12:0] [7:0] samples, [12:0] samples_enabled
   - Outputs: [7:0] sample_mixed
 - pwm.sv                         : Pulse Width Modulation module.
-  - Inputs: [7:0] sample_mixed
+  - Inputs: enable, [7:0] sample_mixed
   - Outputs: pwm_o (add pwm_o_n for differential pair?)
 - mode_fsm.sv                    : Wave Mode Controller FSM module.
   - Inputs: modekey_edge
