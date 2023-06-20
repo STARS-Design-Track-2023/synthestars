@@ -24,7 +24,7 @@ Description of functionality, how to use it, and any supporting equipment requir
 - sequential_divider.sv          : Sequential Divider module.
   - Inputs: enable, [15:0] divider, [17:0] count, flag
   - Outputs: [7:0] quotient
-- waveshaper.sv
+- waveshaper.sv                  : Wave shaping and enveloping module.
   - Inputs: [7:0] quotient, [1:0] mode
   - Outputs: [7:0] sample
 - mixer.sv                       : Polyphonic wave mixer with sequential divider.
