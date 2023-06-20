@@ -33,6 +33,9 @@ Description of functionality, how to use it, and any supporting equipment requir
 - pwm.sv                         : Pulse Width Modulation module.
   - Inputs: [7:0] sample_mixed
   - Outputs: pwm_o (add pwm_o_n for differential pair?)
+- mode_fsm.sv                    : Wave Mode Controller FSM module.
+  - Inputs: modekey_edge
+  - Outputs: [1:0] mode
 
 ## Testbenching
 - tb_.sv : This is the test bench used to test your design.
