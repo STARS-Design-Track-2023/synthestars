@@ -12,8 +12,8 @@ Description of functionality, how to use it, and any supporting equipment requir
 
 ## Base Source Files
 - keypad_encoder.sv              : Synchronizer and Edge Detector Module. Routes to FSM and 13 Oscillators.
-  - Inputs: [13:0] keypad_i
-  - Outputs: [12:0] keypad_s, modekey
+  - Inputs: [14:0] keypad_i
+  - Outputs: [12:0] keypad_s, modekey_edge, octave_edge
 - oscillator.sv                  : Parameterized oscillator module.
   - Parameter: DIVIDER (16-bit)
   - Inputs: enable, [1:0] octave
