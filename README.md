@@ -7,18 +7,32 @@
 * Steph
 * Aidan
 
-## 13-Channel Simultaneous Synthesizer
+## 13-Channel Synthesizer
 Description of functionality, how to use it, and any supporting equipment required
 
 ## Base Source Files
-- flex_counter.sv                : Counter Module code here.
-- freq_divider.sv                : Frequency Divider Module code here.
-- keypad_encoder.sv              : Priority Encoder and Edge Detector Module code here.
-- oscillator.sv                  : Oscillator Wrapper code here.
-- pwm.sv                         : PWM Coversion Module code here.
-- sample_rate_wrapper.sv         : Sample Rate Counter Wrapper code here.
-- synth_fsm.sv                   : Controller FSM code here.
-- waveshaper.sv                  : Waveshaper Module code here.
+- keypad_encoder.sv              : Synchronizer and Edge Detector Module. Routes to FSM and 13 Oscillators.
+  - Inputs: [13:0] keypad_i
+  - Outputs: [12:0] keypad_s, modekey
+- oscillator.sv                  : Parameterized oscillator module.
+  - Parameter: DIVIDER (16-bit)
+  - Inputs: enable, [1:0] octave
+  - Outputs: [17:0] count
+- sample_rate_clock_divider.sv   : Sample Rate Clock Divider module.
+  - Inputs: enable
+  - Outputs: flag
+- sequential_divider.sv          : Sequential Divider module.
+  - Inputs: enable, [15:0] divider, [17:0] count, flag
+  - Outputs: [7:0] quotient
+- waveshaper.sv
+  - Inputs: [7:0] quotient, [1:0] mode
+  - Outputs: [7:0] sample
+- mixer.sv                       : Polyphonic wave mixer with sequential divider.
+  - Inputs: [12:0] [7:0] samples, [12:0] samples_enabled
+  - Outputs: [7:0] sample_mixed
+- pwm.sv                         : Pulse Width Modulation module.
+  - Inputs: [7:0] sample_mixed
+  - Outputs: pwm_o (add pwm_o_n for differential pair?)
 
 ## Testbenching
 - tb_.sv : This is the test bench used to test your design.
@@ -32,6 +46,9 @@ List all the required equipment and upload a breadboard with the equipment set u
 ## RTL Diagrams
 All the stuff from the proposal goes here, obviously updated from the time you did the proposal to the final layout
 Include more than just block diagrams, including sub-block diagrams, state-transition diagrams, flowcharts, and timing diagrams
+
+## Extensions
+Add possible extensions here...
 
 # Deadlines and Events
 ### Monday June 19th: Design Review Presentations
