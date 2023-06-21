@@ -1,7 +1,7 @@
 # STARS 2023 Design Final Project
 
 ## SyntheSTARS
-* Diego Lopez
+* Diego Jesus Lopez
 * Emily
 * Michael
 * Steph
