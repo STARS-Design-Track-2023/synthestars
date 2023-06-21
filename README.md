@@ -4,7 +4,7 @@
 * Diego Lopez
 * Emily
 * Michael
-* Steph Close
+* Steph
 * Aidan
 
 ## 13-Channel Synthesizer
