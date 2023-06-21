@@ -3,7 +3,7 @@
 ## SyntheSTARS
 * Diego Jesus Lopez
 * Emily
-* Michael Foster
+* Michael FOSTER
 * Steph
 * Aidan
 
