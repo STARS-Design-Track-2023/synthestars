@@ -2,7 +2,7 @@
 
 ## SyntheSTARS
 * Diego Lopez
-* Emily Moreno
+* Emily Moreno (lol)
 * Michael
 * Steph
 * Aidan
