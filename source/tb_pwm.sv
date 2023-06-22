@@ -86,7 +86,7 @@ module tb_pwm ();
 
   // Set input signals to zero before starting with new testcases
   task start_testcase;
-    input string test_case_name
+    input string test_case_name;
   begin
     // Space test case out from previous test case
     #(CLK_PERIOD * 3);
@@ -126,8 +126,8 @@ module tb_pwm ();
   (
     .clk(tb_clk), 
     .nrst(tb_nrst), 
-    .mixed_sample(tb_sample)
-    .en(tb_en),
+    .mixed_sample(tb_sample),
+    .enable(tb_en),
     .PWM_o(tb_pwm_o)
   );
 
