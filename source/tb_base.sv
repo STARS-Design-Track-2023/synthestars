@@ -82,13 +82,13 @@ module tb_base ();
 
   // Set input signals to zero before starting with new testcases
   task start_testcase;
-    input string test_case_name
+    input string test_case_name;
   begin
     // Space test case out from previous test case
     #(CLK_PERIOD * 3);
 
     // Set name and number
-    tb_test_num  = tb_test_num + 1;
+    tb_test_case_num  = tb_test_case_num + 1;
     tb_test_case_name = test_case_name;
 
     // Reset and deactivate DUT
@@ -108,8 +108,7 @@ module tb_base ();
     end
     else begin // Check failed
       tb_mismatch = 1'b1;
-      $error("Incorrect output %s during %s test case.
-              Expected %h, got %h.", check_tag, tb_test_case_name, tb_expected_output, tb_D);
+      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_output, tb_D);
     end
 
     // Wait some small amount of time so check pulse timing is visible on waves
@@ -117,44 +116,6 @@ module tb_base ();
     tb_check =1'b0;
   end
   endtask
-
-
-  //*************************************************
-  //                  EXTRA TASKS
-  //*************************************************
-  /*
-  // Task to manage the timing of sending one bit through the shift register
-  task send_bit;
-    input logic bit_to_send;
-  begin
-    // Synchronize to the negative edge of clock to prevent timing errors
-    @(negedge tb_clk);
-    
-    // Set the value of the bit
-    tb_D = bit_to_send;
-    // Activate the shift enable
-    tb_mode_i = tb_mode;
-
-    // Wait for the value to have been shifted in on the rising clock edge
-    @(posedge tb_clk);
-    #(PROPAGATION_DELAY);
-
-    // Turn off the Shift enable
-    tb_mode_i = 2'b0;
-  end
-  endtask
-
-  // Task to contiguosly send a stream of bits through the shift register
-  task send_stream;
-    input logic bit_stream [];
-  begin
-    // Coniguously stream out all of the bits in the provided input vector
-    for(tb_bit_num = 0; tb_bit_num < bit_stream.size(); tb_bit_num++) begin
-      // Send the current bit
-      send_bit(bit_stream[tb_bit_num]);
-    end
-  end
-  endtask*/
 
   // DUT Portmap
   module_name DUT 
@@ -175,10 +136,6 @@ module tb_base ();
     // Initialize all of the test inputs and test environment
     deactivate_signals();
     start_dut();
-
-    // Initialize module-task-specific test cases
-    // tb_stream_check_tag = "N/A";
-    // tb_bit_num          = -1;   // Initialize to invalid number
     
     // Wait some time before starting first test case
     #(0.1);
@@ -186,8 +143,8 @@ module tb_base ();
     // ************************************************************************
     // Test Case 1: Power-on Reset of the DUT
     // ************************************************************************
-    tb_test_num  = tb_test_num + 1;
-    tb_test_case = "Power on Reset";
+    tb_test_case_num  = tb_test_case_num + 1;
+    tb_test_case_name = "Power on Reset";
     // Note: Do not use reset task during reset test case since we need to specifically check behavior during reset
     // Wait some time before applying test case stimulus
     #(0.1);
