@@ -14,6 +14,7 @@ module keypad_encoder (
 		.in(mode),
 		.out(sync_mode)
 	);
+
 	
 	edge_detector edgy(
 		.clk(clk),
@@ -26,4 +27,6 @@ module keypad_encoder (
 		.in(sync_mode),
 		.out(mode_out)
 	);
+
+	AAAA
 endmodule
