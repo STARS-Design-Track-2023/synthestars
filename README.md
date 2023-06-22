@@ -2,10 +2,10 @@
 
 ## SyntheSTARS
 * Diego Jesus Lopez
-* Emily
-* Michael FOSTER
-* Steph
-* Aidan
+* Emily Moreno
+* Michael Foster
+* Steph Close
+* Aidan Prendergast
 
 ## 13-Channel Synthesizer
 Description of functionality, how to use it, and any supporting equipment required
