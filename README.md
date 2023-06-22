@@ -5,7 +5,7 @@
 * Emily Moreno
 * Michael Foster
 * Steph Close
-* Aidan Prendergast
+* (TA) Aidan Prendergast
 
 ## 13-Channel Synthesizer
 Description of functionality, how to use it, and any supporting equipment required
