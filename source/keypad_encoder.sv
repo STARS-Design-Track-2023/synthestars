@@ -27,6 +27,4 @@ module keypad_encoder (
 		.in(sync_mode),
 		.out(mode_out)
 	);
-
-	AAAA
 endmodule
