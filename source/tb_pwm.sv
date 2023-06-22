@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module tb_base ();
+module tb_pwm ();
 
   // 10MHz Clock Rate
   localparam CLK_PERIOD        = 100;
@@ -12,8 +12,9 @@ module tb_base ();
   localparam  VALUE = 8'b0;
 
   // Inactive Inputs and Reset Output Values
-  localparam  INACTIVE_D_VALUE = 1'b0;
-  localparam  RESET_OUTPUT_VALUE = 8'b0;
+  localparam  EN_OFF = 1'b0;
+  localparam  INACTIVE_SAMPLE_VALUE = 8'b0;
+  localparam  RESET_PWM_O = 1'b0;
 
   // Declare Test Case Signals
   integer tb_test_case_num;
@@ -23,12 +24,14 @@ module tb_base ();
   logic   tb_check;
 
   // Declare DUT Connection Signals
-  logic   tb_clk;
-  logic   tb_nrst;
-  logic   tb_D;
+  logic tb_clk;
+  logic tb_nrst;
+  logic [7:0] tb_sample;
+  logic tb_pwm_o;
+  logic tb_en;
 
   // Declare the Test Bench Signals for Expected Results
-  logic tb_expected_output;
+  logic tb_expected_pwm_o;
 
   // Clock generation block
   always begin
@@ -76,7 +79,8 @@ module tb_base ();
   // Set input signals to zero before starting with new testcases
   task deactivate_signals;
   begin
-    tb_D = INACTIVE_D_VALUE;
+    tb_sample = INACTIVE_SAMPLE_VALUE;
+    tb_en = EN_OFF;
   end
   endtask
 
@@ -103,65 +107,28 @@ module tb_base ();
   begin
     tb_mismatch = 1'b0;
     tb_check    = 1'b1;
-    if(tb_expected_output == tb_D) begin // Check passed
+    if(tb_expected_pwm_o == tb_pwm_o) begin // Check passed
       $display("Correct output %s during %s test case.", check_tag, tb_test_case_name);
     end
     else begin // Check failed
       tb_mismatch = 1'b1;
-      $error("Incorrect output %s during %s test case.
-              Expected %h, got %h.", check_tag, tb_test_case_name, tb_expected_output, tb_D);
+      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_pwm_o, tb_pwm_o);
     end
 
     // Wait some small amount of time so check pulse timing is visible on waves
     #(0.1);
-    tb_check =1'b0;
+    tb_check = 1'b0;
   end
   endtask
-
-
-  //*************************************************
-  //                  EXTRA TASKS
-  //*************************************************
-  /*
-  // Task to manage the timing of sending one bit through the shift register
-  task send_bit;
-    input logic bit_to_send;
-  begin
-    // Synchronize to the negative edge of clock to prevent timing errors
-    @(negedge tb_clk);
-    
-    // Set the value of the bit
-    tb_D = bit_to_send;
-    // Activate the shift enable
-    tb_mode_i = tb_mode;
-
-    // Wait for the value to have been shifted in on the rising clock edge
-    @(posedge tb_clk);
-    #(PROPAGATION_DELAY);
-
-    // Turn off the Shift enable
-    tb_mode_i = 2'b0;
-  end
-  endtask
-
-  // Task to contiguosly send a stream of bits through the shift register
-  task send_stream;
-    input logic bit_stream [];
-  begin
-    // Coniguously stream out all of the bits in the provided input vector
-    for(tb_bit_num = 0; tb_bit_num < bit_stream.size(); tb_bit_num++) begin
-      // Send the current bit
-      send_bit(bit_stream[tb_bit_num]);
-    end
-  end
-  endtask*/
 
   // DUT Portmap
-  module_name DUT 
+  pwm DUT 
   (
     .clk(tb_clk), 
     .nrst(tb_nrst), 
-    .D(tb_D)
+    .mixed_sample(tb_sample),
+    .enable(tb_en),
+    .PWM_o(tb_pwm_o)
   );
 
   // Signal Dump
@@ -215,18 +182,112 @@ module tb_base ();
     check_output("after reset was released");
 
     // ************************************************************************
-    // Test Case 2: Example Test Case
+    // Test Case 2: PWM with a 127 sample (Half PWM)
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("Example Test Case");
+    start_testcase("Basic half PWM");
 
-    // Check 1
-    tb_expected_output = 1;
-    check_output("at check 1");
+    // Stimuli Set
+    tb_sample = 8'd127;
+    tb_en = 1'b1;
 
-    // Check 2
-    #(CLK_PERIOD);
-    check_output("at check 2");
+    // Immediate check (Given enable count should be 1 here)
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 1;
+    check_output("after 1 cycle");
+
+    // Before PWM goes low
+    #(CLK_PERIOD * 126) // 125 negedges later
+    tb_expected_pwm_o = 1;
+    check_output("after 126 clock cycles");
+
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 0;
+    check_output("after 127 cycles");
+
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 0;
+    check_output("after 128 cycles");
+
+    #(CLK_PERIOD * 127) // 127 negedges later
+    tb_expected_pwm_o = 0;
+    check_output("after 255 cycles");
+
+    #(CLK_PERIOD) // Rollover
+    tb_expected_pwm_o = 1;
+    check_output("after rollover");
+
+    // ************************************************************************
+    // Test Case 3: PWM with a 0 sample (OFF PWM)
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("Basic off PWM");
+
+    // Stimuli Set
+    tb_sample = 8'd0;
+    tb_en = 1'b1;
+
+    // Immediate check (Given enable count should be 1 here)
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 0;
+    check_output("after 1 cycle");
+
+    // Before PWM goes low
+    #(CLK_PERIOD * 126) // 125 negedges later
+    tb_expected_pwm_o = 0;
+    check_output("after 126 clock cycles");
+
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 0;
+    check_output("after 127 cycles");
+
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 0;
+    check_output("after 128 cycles");
+
+    #(CLK_PERIOD * 127) // 127 negedges later
+    tb_expected_pwm_o = 0;
+    check_output("after 255 cycles");
+
+    #(CLK_PERIOD) // Rollover
+    tb_expected_pwm_o = 0;
+    check_output("after rollover");
+
+    // ************************************************************************
+    // Test Case 3: PWM with a 255 sample (FULL PWM)
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("Basic full PWM");
+
+    // Stimuli Set
+    tb_sample = 8'd0;
+    tb_en = 1'b1;
+
+    // Immediate check (Given enable count should be 1 here)
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 1;
+    check_output("after 1 cycle");
+
+    // Before PWM goes low
+    #(CLK_PERIOD * 126) // 125 negedges later
+    tb_expected_pwm_o = 1;
+    check_output("after 126 clock cycles");
+
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 1;
+    check_output("after 127 cycles");
+
+    #(CLK_PERIOD)
+    tb_expected_pwm_o = 1;
+    check_output("after 128 cycles");
+
+    #(CLK_PERIOD * 127) // 127 negedges later
+    tb_expected_pwm_o = 1;
+    check_output("after 255 cycles");
+
+    #(CLK_PERIOD) // Rollover
+    tb_expected_pwm_o = 1;
+    check_output("after rollover");
 
     $display("Simulation complete");
     $stop;
