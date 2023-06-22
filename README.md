@@ -2,10 +2,10 @@
 
 ## SyntheSTARS
 * Diego Jesus Lopez
-* Emily
-* Michael FOSTER
-* Steph
-* Aidan
+* Emily Moreno
+* Michael Foster
+* Steph Close
+* (TA) Aidan Prendergast
 
 ## 13-Channel Synthesizer
 Description of functionality, how to use it, and any supporting equipment required
@@ -68,6 +68,8 @@ Add possible extensions here...
 <br><b>Notes:</b> Beautify GTKWave formatting for ease of demonstration.
 
 ### Monday, July 3rd: Final Design Presentations
+
+  Present a complete, functional design to a larger group as the final requirement for your summer STARS digital design track.
 
 ## Some Legal Statement
 From Purdue that I haven't figured out yet, maybe some stuff about Dr. J, the program, and other instructors
