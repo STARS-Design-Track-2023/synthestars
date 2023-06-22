@@ -3,7 +3,7 @@ Module - PWM
 Author - Diego Lopez
 Date   - June 22, 2023 
 ////////////////////////////////////////////////////////////////////////////////*/
-module PWM(input logic clk, nRst, input logic [7:0] mixed_sample,
+module PWM(input logic clk, nRst, enable, input logic [7:0] mixed_sample,
              output logic PWM_o);
     logic [7:0] count, nxt_count;
     logic pwm;
@@ -32,6 +32,6 @@ module PWM(input logic clk, nRst, input logic [7:0] mixed_sample,
         if(!nRst)
             PWM_o = 0;
         else
-            PWM_o = pwm;
+            PWM_o = enable ? pwm : 0;
     end
 endmodule

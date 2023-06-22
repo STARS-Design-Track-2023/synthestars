@@ -3,7 +3,8 @@ Module - Sample Rate Clock Divider
 Author - Diego Lopez
 Date   - June 22, 2023 
 ////////////////////////////////////////////////////////////////////////////////*/
-module sample_rate_clock_divider(input logic clk, nRst, output logic sample_now);
+module sample_rate_clock_divider(input logic clk, nRst, enable, 
+                                    output logic sample_now);
     logic [7:0] count, nxt_count;
 
     //Flip-Flop
@@ -11,7 +12,7 @@ module sample_rate_clock_divider(input logic clk, nRst, output logic sample_now)
         if(!nRst)
             count = 0;
         else
-            count = nxt_count;
+            count = enable ? nxt_count : 0;
     end
 
     //Next State Logic
@@ -24,5 +25,5 @@ module sample_rate_clock_divider(input logic clk, nRst, output logic sample_now)
 
     //Output Logic
     always_comb 
-        sample_now = (count == 255);
+        sample_now = enable ? (count == 255) : 0;
 endmodule
