@@ -112,8 +112,7 @@ module tb_pwm ();
     end
     else begin // Check failed
       tb_mismatch = 1'b1;
-      $error("Incorrect output %s during %s test case.
-              Expected %h, got %h.", check_tag, tb_test_case_name, tb_expected_pwm_o, tb_pwm_o);
+      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_pwm_o, tb_pwm_o);
     end
 
     // Wait some small amount of time so check pulse timing is visible on waves
@@ -121,44 +120,6 @@ module tb_pwm ();
     tb_check = 1'b0;
   end
   endtask
-
-
-  //*************************************************
-  //                  EXTRA TASKS
-  //*************************************************
-  /*
-  // Task to manage the timing of sending one bit through the shift register
-  task send_bit;
-    input logic bit_to_send;
-  begin
-    // Synchronize to the negative edge of clock to prevent timing errors
-    @(negedge tb_clk);
-    
-    // Set the value of the bit
-    tb_D = bit_to_send;
-    // Activate the shift enable
-    tb_mode_i = tb_mode;
-
-    // Wait for the value to have been shifted in on the rising clock edge
-    @(posedge tb_clk);
-    #(PROPAGATION_DELAY);
-
-    // Turn off the Shift enable
-    tb_mode_i = 2'b0;
-  end
-  endtask
-
-  // Task to contiguosly send a stream of bits through the shift register
-  task send_stream;
-    input logic bit_stream [];
-  begin
-    // Coniguously stream out all of the bits in the provided input vector
-    for(tb_bit_num = 0; tb_bit_num < bit_stream.size(); tb_bit_num++) begin
-      // Send the current bit
-      send_bit(bit_stream[tb_bit_num]);
-    end
-  end
-  endtask*/
 
   // DUT Portmap
   pwm DUT 
