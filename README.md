@@ -69,5 +69,7 @@ Add possible extensions here...
 
 ### Monday, July 3rd: Final Design Presentations
 
+  Present a complete, functional design to a larger group as the final requirement for your summer STARS digital design track.
+
 ## Some Legal Statement
 From Purdue that I haven't figured out yet, maybe some stuff about Dr. J, the program, and other instructors
