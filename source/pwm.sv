@@ -1,8 +1,8 @@
 /************************************************************************
-Module     - PWM
-Author     - Diego Lopez
-Date       - June 22, 2023 
-Passed TB? - No
+Module      - PWM
+Author      - Diego Lopez
+Last Update - June 23, 2023 
+Passed TB?  - Yes
 *************************************************************************/
 module pwm(input logic clk, nrst, enable, input logic [7:0] mixed_sample,
              output logic PWM_o);
