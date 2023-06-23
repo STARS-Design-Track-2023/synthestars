@@ -1,3 +1,9 @@
+/**********************************
+Module - Keypad Encoder
+Author - Michael Foster
+Date   - June 22, 2023 
+**********************************/
+
 module keypad_encoder (
 	input logic octave, mode, clk,
 	output logic octave_out, mode_out
@@ -14,6 +20,7 @@ module keypad_encoder (
 		.in(mode),
 		.out(sync_mode)
 	);
+
 	
 	edge_detector edgy(
 		.clk(clk),
