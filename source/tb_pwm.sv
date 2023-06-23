@@ -260,7 +260,7 @@ module tb_pwm ();
     start_testcase("Basic full PWM");
 
     // Stimuli Set
-    tb_sample = 8'd0;
+    tb_sample = 8'd255;
     tb_en = 1'b1;
 
     // Immediate check (Given enable count should be 1 here)
@@ -281,9 +281,13 @@ module tb_pwm ();
     tb_expected_pwm_o = 1;
     check_output("after 128 cycles");
 
-    #(CLK_PERIOD * 127) // 127 negedges later
+    #(CLK_PERIOD * 126) // 126 negedges later
     tb_expected_pwm_o = 1;
-    check_output("after 255 cycles");
+    check_output("after 254 cycles");
+
+    #(CLK_PERIOD) // Max Value has Dip
+    tb_expected_pwm_o = 0;
+    check_output("after rollover");
 
     #(CLK_PERIOD) // Rollover
     tb_expected_pwm_o = 1;
