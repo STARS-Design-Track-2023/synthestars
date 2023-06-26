@@ -4,13 +4,13 @@ Author - Diego Lopez
 Date   - June 22, 2023 
 *********************************************************************************/
 module oscillator #(parameter COUNTS = 149)
-        (input logic clk, nRst, enable, 
+        (input logic clk, nRst, enable, input logic [1:0] oct_dwn,
         output logic [7:0] saw_wave, divisor);
     logic [7:0] nxt_saw;
     logic [9:0] nxt_count, count;
 
     always_comb begin
-        if(count >= COUNTS)
+        if(count >= COUNTS << oct_dwn)
             nxt_count = 1;
         else
             nxt_count = count + 1;
@@ -25,7 +25,7 @@ module oscillator #(parameter COUNTS = 149)
     always_comb begin
         if (saw_wave >= 255)
             nxt_saw = 0;
-        else if (count == COUNTS)
+        else if (count == COUNTS << oct_dwn)
             nxt_saw = saw_wave + 1;
         else
             nxt_saw = saw_wave;
