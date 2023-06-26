@@ -92,7 +92,7 @@ module tb_pwm ();
     #(CLK_PERIOD * 3);
 
     // Set name and number
-    tb_test_num  = tb_test_num + 1;
+    tb_test_case_num  = tb_test_case_num + 1;
     tb_test_case_name = test_case_name;
 
     // Reset and deactivate DUT
@@ -153,8 +153,8 @@ module tb_pwm ();
     // ************************************************************************
     // Test Case 1: Power-on Reset of the DUT
     // ************************************************************************
-    tb_test_num  = tb_test_num + 1;
-    tb_test_case = "Power on Reset";
+    tb_test_case_num  = tb_test_case_num + 1;
+    tb_test_case_name = "Power on Reset";
     // Note: Do not use reset task during reset test case since we need to specifically check behavior during reset
     // Wait some time before applying test case stimulus
     #(0.1);
@@ -166,7 +166,7 @@ module tb_pwm ();
     #(CLK_PERIOD * 0.5);
 
     // Check that internal state was correctly reset
-    tb_expected_output = RESET_OUTPUT_VALUE;
+    tb_expected_pwm_o = RESET_PWM_O;
     check_output("after reset applied");
 
     // Check that the reset value is maintained during a clock cycle
@@ -260,7 +260,7 @@ module tb_pwm ();
     start_testcase("Basic full PWM");
 
     // Stimuli Set
-    tb_sample = 8'd0;
+    tb_sample = 8'd255;
     tb_en = 1'b1;
 
     // Immediate check (Given enable count should be 1 here)
@@ -281,9 +281,13 @@ module tb_pwm ();
     tb_expected_pwm_o = 1;
     check_output("after 128 cycles");
 
-    #(CLK_PERIOD * 127) // 127 negedges later
+    #(CLK_PERIOD * 126) // 126 negedges later
     tb_expected_pwm_o = 1;
-    check_output("after 255 cycles");
+    check_output("after 254 cycles");
+
+    #(CLK_PERIOD) // Max Value has Dip
+    tb_expected_pwm_o = 0;
+    check_output("after rollover");
 
     #(CLK_PERIOD) // Rollover
     tb_expected_pwm_o = 1;

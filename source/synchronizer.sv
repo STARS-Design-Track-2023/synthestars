@@ -1,3 +1,9 @@
+/**********************************
+Module - Synchronizer
+Author - Michael Foster
+Date   - June 22, 2023 
+**********************************/
+
 module synchronizer (
 	input logic in, clk,
 	output logic out
