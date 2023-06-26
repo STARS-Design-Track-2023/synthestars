@@ -1,7 +1,8 @@
 /********************************************************************************
-Module - Sample Rate Clock Divider
-Author - Diego Lopez
-Date   - June 22, 2023 
+Module      - Sample Rate Clock Divider
+Author      - Diego Lopez
+Last Update - June 22, 2023 
+Passed TB?  - Not Yet 
 *********************************************************************************/
 module sample_rate_clock_divider(input logic clk, nRst, enable, 
                                     output logic sample_now);
