@@ -26,6 +26,7 @@ n6 ? s6 == 1 : s6 == 0;
 n7 ? s7 == 1 : s7 == 0;
 n8 ? s8 == 1 : s8 == 0;
 n9 ? s9 == 1 : s9 == 0;
+
 n10 ? s10 == 1 : s10 == 0;
 n11 ? s11 == 1 : s11 == 0;
 n12 ? s12 == 1 : s12 == 0;
@@ -33,6 +34,7 @@ n13 ? s13 == 1 : s13 == 0;
 
 if(n1 | n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9 | n10  | n11 | n12 | n13) begin
 num_active = 2'd1;
+
 mixed_sample = mixed_sample / num_active;
     if(n1 | n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9 | n10  | n11 | n12 | n13) begin
         num_active = 2'd2;
