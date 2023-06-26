@@ -5,11 +5,17 @@ module sequential_divider (
 
     output logic [7:0] quotient
 );
-    logic [2:0] count, next_count;
+    logic [3:0] count, next_count;
     logic [23:0] R, next_R;
     logic [15:0] D, next_D;
     logic [7:0] Q, next_Q;
     logic [7:0] next_quotient;
+
+    logic [23:0] top_R_shift;
+    logic [15:0] top_R;
+
+    assign top_R_shift = (R << 1);
+    assign top_R = top_R_shift[23:8];
 
     typedef enum logic [2:0] {start, load, divide, done} state_t;
     logic [2:0] state, next_state;
@@ -53,16 +59,16 @@ module sequential_divider (
                 next_state = divide;
              end
              divide: begin
-                if({(R << 1)}[23:8] >= D) begin
-                    next_R = {(R << 1)}[23:0] - {D, 8'b0};
-                    next_Q = (Q << 1) + 8'b1;
+                if(top_R >= D) begin
+                    next_R = (R << 1) - {D, 8'b0};
+                    next_Q = (Q << 1) + 8'b00000001;
                 end else begin
                     next_R = (R << 1);
-                    next_Q = (Q << 1) + 8'b0;
+                    next_Q = (Q << 1) + 8'b00000000;
                 end
                 
                 next_count = count + 1;
-                if(count == 3'b111)
+                if(count == 4'b0110)
                     next_state = done;
                 else
                     next_state = divide;
