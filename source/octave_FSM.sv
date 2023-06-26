@@ -3,9 +3,9 @@ Module - Octave FSM
 Author - Emily Moreno
 Date   - June 22, 2023 
 ////////////////////////////////////////////////////////////////////////////////*/
-module octave_fsm (
+module octave_FSM (
     // HW
-    input logic oct_down, output logic [1:0]oct_switch);
+    input logic clk, nrst, oct_down, output logic [1:0]oct_switch);
 
 logic [1:0]next_q;
 
