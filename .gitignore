@@ -4,3 +4,4 @@ ice40.log
 xt
 sim_build/
 ice40/build
+Makefile
