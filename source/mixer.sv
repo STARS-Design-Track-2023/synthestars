@@ -8,10 +8,9 @@ module mixer(input logic [7:0]n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12,
 
 
 logic [11:0]max;
-logic [1:0]num_active;
+logic [3:0]N_active;
 logic [12:0]active_notes;
 logic s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13;
-logic N_active;
 
 reg [1:0] register [3];
 reg [1:0] queue [3];
@@ -21,19 +20,19 @@ always_comb begin
 mixed_sample = {n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9 + n10 + n11 + n12 + n13};
 mixed_sample = mixed_sample > max ? max : mixed_sample; //prevents pain
 
-    n1 ? s1 == 1 : s1 == 0;
-    n2 ? s2 == 1 : s2 == 0;
-    n3 ? s3 == 1 : s3 == 0;
-    n4 ? s4 == 1 : s4 == 0;
-    n5 ? s5 == 1 : s5 == 0;
-    n6 ? s6 == 1 : s6 == 0;
-    n7 ? s7 == 1 : s7 == 0;
-    n8 ? s8 == 1 : s8 == 0;
-    n9 ? s9 == 1 : s9 == 0;
-    n10 ? s10 == 1 : s10 == 0;
-    n11 ? s11 == 1 : s11 == 0;
-    n12 ? s12 == 1 : s12 == 0;
-    n13 ? s13 == 1 : s13 == 0;
+    s1 = n1 > 0? 1 : 0;
+    s2 = n2 > 0? 1 : 0;
+    s3 = n3 > 0? 1 : 0;
+    s4 = n4 > 0? 1 : 0;
+    s5 = n5 > 0? 1 : 0;
+    s6 = n6 > 0? 1 : 0;
+    s7 = n7 > 0? 1 : 0;
+    s8 = n8 > 0? 1 : 0;
+    s9 = n9 > 0? 1 : 0;
+    s10 = n10 > 0? 1 : 0;
+    s11 = n11 > 0? 1 : 0;
+    s12 = n12 > 0? 1 : 0;
+    s13 = n13 > 0? 1 : 0;
 
     active_notes[0] = s1;
     active_notes[1] = s2;
