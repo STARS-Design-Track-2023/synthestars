@@ -5,7 +5,7 @@ module sequential_divider (
 
     output logic [7:0] quotient
 );
-    logic [3:0] count, next_count;
+    logic [2:0] count, next_count;
     logic [23:0] R, next_R;
     logic [15:0] D, next_D;
     logic [7:0] Q, next_Q;
@@ -53,7 +53,7 @@ module sequential_divider (
                 end
              end
              load: begin
-                next_Q = 0;
+                next_Q = 8'b00000000;
                 next_D = divider;
                 next_R = {dividend, 8'd0};
                 next_state = divide;
@@ -64,11 +64,11 @@ module sequential_divider (
                     next_Q = (Q << 1) + 8'b00000001;
                 end else begin
                     next_R = (R << 1);
-                    next_Q = (Q << 1) + 8'b00000000;
+                    next_Q = (Q << 1);
                 end
                 
                 next_count = count + 1;
-                if(count == 4'b0110)
+                if(count == 3'b111)
                     next_state = done;
                 else
                     next_state = divide;
