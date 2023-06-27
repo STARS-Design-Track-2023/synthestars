@@ -188,19 +188,32 @@ module tb_sequential_divider ();
 
     tb_dividend = 22000;
     tb_divider = 22727; // A4 Standard Divider
+    
+    // Pulse tb_en
     tb_en = 1;
+    #(CLK_PERIOD);
+    tb_en = 0;
 
-    // Wait 267 Clock cycles for maximum division pause
-    #(CLK_PERIOD * 256);
+    // Wait for Division to complete
     #(CLK_PERIOD * 11);
 
-    // Check 1
+    // Division 1 Check
     tb_expected_quotient = 247;
-    check_output("after division #1");
+    check_output("after division #1 finishes");
 
-    // Check 2
+    // Pulse tb_en
     tb_dividend = 22000;
-    #(CLK_PERIOD * 256);
+    tb_en = 1;
+    #(CLK_PERIOD);
+    tb_en = 0;
+
+    #(CLK_PERIOD * 5);
+    check_output("after starting division #2");
+
+    // Wait for Division to complete
+    #(CLK_PERIOD * 6);
+
+    // Division 2 Check
     tb_expected_quotient = 250;
     check_output("after division #2");
 
@@ -212,21 +225,31 @@ module tb_sequential_divider ();
 
     tb_dividend = 22727;
     tb_divider = 22727; // A4 Standard Divider
+    
+    // Pulse tb_en
     tb_en = 1;
+    #(CLK_PERIOD);
+    tb_en = 0;
 
-    // Wait 267 Clock cycles for maximum division pause
-    #(CLK_PERIOD * 256);
+    // Wait for Division to complete
     #(CLK_PERIOD * 11);
 
-    // Check 1
+    // Division 1 Check
     tb_expected_quotient = 255;
-    check_output("after maximum division");
+    check_output("after max division");
 
-    // Check 2 - Rollover
+    // Pulse tb_en
     tb_dividend = 0;
-    #(CLK_PERIOD * 256);
+    tb_en = 1;
+    #(CLK_PERIOD);
+    tb_en = 0;
+
+    // Wait for Division to complete
+    #(CLK_PERIOD * 11);
+
+    // Division 2 Check
     tb_expected_quotient = 0;
-    check_output("after minimum division");
+    check_output("after min division");
 
     $display("Simulation complete");
     $stop;
