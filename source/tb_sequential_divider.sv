@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module tb_base ();
+module tb_sequential_divider ();
 
   // 10MHz Clock Rate
   localparam CLK_PERIOD        = 100;
