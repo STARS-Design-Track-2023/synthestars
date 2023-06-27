@@ -8,7 +8,10 @@
 * (TA) Aidan Prendergast
 
 ## 13-Channel Synthesizer
-Description of functionality, how to use it, and any supporting equipment required
+The (insert kewl chip name) is a polyphonic digital synthesizer. 
+With thirteen keys each representing a single note in a standard 13-key octave,
+a waveform selection key, and an octave switch key, the multi-channel output of 
+(insert kewl chip name) aims to function similarly to that of a piano. 
 
 ## Base Source Files
 Clock and nRst omitted from input lists.
@@ -30,11 +33,14 @@ Clock and nRst omitted from input lists.
   - Outputs: [7:0] sample
 - mixer.sv                       : Polyphonic wave mixer with sequential divider.
   - Inputs: enable, [12:0] [7:0] samples, [12:0] samples_enabled
-  - Outputs: [7:0] sample_mixed
+  - Outputs: [7:0] mixed_sample
 - pwm.sv                         : Pulse Width Modulation module.
   - Inputs: enable, [7:0] sample_mixed
   - Outputs: pwm_o (add pwm_o_n for differential pair?)
 - mode_fsm.sv                    : Wave Mode Controller FSM module.
+  - Inputs: modekey_edge
+  - Outputs: [1:0] mode
+- wavetype_set_fsm.sv              : Wave Mode Controller FSM module.
   - Inputs: modekey_edge
   - Outputs: [1:0] mode
 
