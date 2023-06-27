@@ -8,10 +8,10 @@
 * (TA) Aidan Prendergast
 
 ## 13-Channel Synthesizer
-The (insert kewl chip name) is a polyphonic digital synthesizer. 
-With thirteen keys each representing a single note in a standard 13-key octave,
-a waveform selection key, and an octave switch key, the multi-channel output of 
-(insert kewl chip name) aims to function similarly to that of a piano. 
+The (insert kewl chip name) is a digital polyphonic synthesizer.
+With thirteen keys each representative of a single note in a standard octave,
+a wave type selection mode, and an octave swithcing mode, the (insert kewl chip name) 
+is the working product of our team's design.
 
 ## Base Source Files
 Clock and nRst omitted from input lists.
@@ -33,25 +33,32 @@ Clock and nRst omitted from input lists.
   - Outputs: [7:0] sample
 - mixer.sv                       : Polyphonic wave mixer with sequential divider.
   - Inputs: enable, [12:0] [7:0] samples, [12:0] samples_enabled
-  - Outputs: [7:0] mixed_sample
+  - Outputs: [7:0] sample_mixed
 - pwm.sv                         : Pulse Width Modulation module.
   - Inputs: enable, [7:0] sample_mixed
   - Outputs: pwm_o (add pwm_o_n for differential pair?)
-- mode_fsm.sv                    : Wave Mode Controller FSM module.
+- wavetype_set_fsm.sv            : Wave Mode Controller FSM module.
   - Inputs: modekey_edge
   - Outputs: [1:0] mode
-- wavetype_set_fsm.sv              : Wave Mode Controller FSM module.
-  - Inputs: modekey_edge
-  - Outputs: [1:0] mode
+- octave_fsm.sv                    : Octave switching FSM module.
+  - Inputs: oct_down
+  - Outputs: [1:0] oct_switch
+- edge_dectector.sv                    : Edge detection pulse module.
+  - Inputs: in
+  - Outputs: out 
+
 
 ## Testbenching
-- tb_.sv : This is the test bench used to test your design.
+- tb_base.sv : Base test bench template for further adaptation.
+- tb_pwm.sv : Test bench for the pulse width modifier.
+- tb_sequential_divider.sv : Test bench for the sequential divider.
 
 ## Pin Layout
 Put all the GPIO pin numbers, i/o/io determination, and labels
 
 ## Supporting Equipment
-List all the required equipment and upload a breadboard with the equipment set up (recommend using tinkercad circuits if possible)
+- Testing FPGA Prototype
+- 
 
 ## RTL Diagrams
 All the stuff from the proposal goes here, obviously updated from the time you did the proposal to the final layout
@@ -75,7 +82,3 @@ Add possible extensions here...
 
 ### Monday, July 3rd: Final Design Presentations
 
-  Present a complete, functional design to a larger group as the final requirement for your summer STARS digital design track.
-
-## Some Legal Statement
-From Purdue that I haven't figured out yet, maybe some stuff about Dr. J, the program, and other instructors
