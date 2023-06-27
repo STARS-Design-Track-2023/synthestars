@@ -1,8 +1,9 @@
-/*////////////////////////////////////////////////////////////////////////////////
-Module - Sample Rate Clock Divider
-Author - Diego Lopez
-Date   - June 22, 2023 
-////////////////////////////////////////////////////////////////////////////////*/
+/********************************************************************************
+Module      - Sample Rate Clock Divider
+Author      - Diego Lopez
+Last Update - June 22, 2023 
+Passed TB?  - Not Yet 
+*********************************************************************************/
 module sample_rate_clock_divider(input logic clk, nRst, enable, 
                                     output logic sample_now);
     logic [7:0] count, nxt_count;
@@ -12,7 +13,7 @@ module sample_rate_clock_divider(input logic clk, nRst, enable,
         if(!nRst)
             count = 0;
         else
-            count = enable ? nxt_count : 0;
+            count = nxt_count;
     end
 
     //Next State Logic
@@ -20,7 +21,7 @@ module sample_rate_clock_divider(input logic clk, nRst, enable,
         if (count >= 255)
             nxt_count = 0;
         else
-            nxt_count = count + 1;
+            nxt_count = enable ? (count + 1) : 0;
     end
 
     //Output Logic
