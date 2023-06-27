@@ -3,22 +3,27 @@ Module - Mixer
 Author - Emily Moreno
 Date   - June 22, 2023 
 ********************************************************************************/
-module mixer(input logic [7:0]n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, output logic [11:0]mixed_sample);
-
-
+module mixer(input logic [11:0]n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, input logic clk, nRst, en, dividened, output logic [11:0]mixed_sample);
 
 logic [11:0]max;
 logic [3:0]N_active;
 logic [12:0]active_notes;
 logic s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13;
 
-reg [1:0] register [3];
-reg [1:0] queue [3];
 assign max = '1;
+
+always_ff @ (posedge clk, negedge nRst) begin
+if(nRst == 0) begin
+    mixed_sample <= 12'b000000000000;
+end
+else begin
+    mixed_sample <= 
+end
+end
 
 always_comb begin
 mixed_sample = {n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9 + n10 + n11 + n12 + n13};
-mixed_sample = mixed_sample > max ? max : mixed_sample; //prevents pain
+mixed_sample = mixed_sample > max ? max : mixed_sample;
 
     s1 = n1 > 0? 1 : 0;
     s2 = n2 > 0? 1 : 0;
@@ -49,9 +54,7 @@ mixed_sample = mixed_sample > max ? max : mixed_sample; //prevents pain
     active_notes[12] = s13;
 
 N_active = $countones(active_notes);
-
-mixed_sample = mixed_sample / N_active;
-
 end
- 
+
+sequential_divider u1(.clk(clk), .Nrst(nRst), .en(en), .divider(N_active), .dividend(mixed_sample), .quotient(mixed_sample));
 endmodule
