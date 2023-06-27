@@ -32,7 +32,7 @@ module tb_sequential_divider ();
   logic   [7:0]  tb_quotient;
 
   // Declare the Test Bench Signals for Expected Results
-  logic tb_expected_quotient;
+  logic [7:0] tb_expected_quotient;
 
   // Clock generation block
   always begin
