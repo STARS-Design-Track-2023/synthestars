@@ -80,5 +80,6 @@ Add possible extensions here...
 <br><b>Requirements:</b> Transcript of Passing Testbench Cases for each tested module, Organized GTKWave showcase of passing test cases.
 <br><b>Notes:</b> Beautify GTKWave formatting for ease of demonstration.
 
-### Monday, July 3rd: Final Design Presentations
+### Monday, July 3rd: Practice Design Presentations
+### Wednesday - Friday, July 5th - 7th: Final Design Presentations
 
