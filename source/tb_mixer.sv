@@ -27,10 +27,8 @@ module tb_sequential_divider ();
   logic   tb_clk;
   logic   tb_nrst;
   logic   tb_en;
-  logic   [15:0] tb_divider;
-  logic   [15:0] tb_dividend;
-  logic   [7:0]  tb_quotient;
-
+  logic   [7:0] tb_divider;
+  
   // Declare the Test Bench Signals for Expected Results
   logic [7:0] tb_expected_quotient;
 

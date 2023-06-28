@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module tb_sequential_divider ();
+module tb_synth ();
 
   // 10MHz Clock Rate
   localparam CLK_PERIOD        = 100;
@@ -12,9 +12,9 @@ module tb_sequential_divider ();
   localparam  VALUE = 8'b0;
 
   // Inactive Inputs and Reset Output Values
-  localparam  ENABLE_OFF = 1'b0;
-  localparam  INPUT_OFF = 16'b1;
-  localparam  RESET_OUTPUT_VALUE = 8'b0;
+  localparam  INACTIVE_EN_VALUE = 1'b0;
+  localparam  INACTIVE_PB_VALUE = 15'b0;
+  localparam  RESET_PWM_VALUE = 1'b0;
 
   // Declare Test Case Signals
   integer tb_test_case_num;
@@ -27,12 +27,11 @@ module tb_sequential_divider ();
   logic   tb_clk;
   logic   tb_nrst;
   logic   tb_en;
-  logic   [15:0] tb_divider;
-  logic   [15:0] tb_dividend;
-  logic   [7:0]  tb_quotient;
+  logic   [14:0] tb_pb;
+  logic   tb_pwm;
 
   // Declare the Test Bench Signals for Expected Results
-  logic [7:0] tb_expected_quotient;
+  logic tb_expected_pwm;
 
   // Clock generation block
   always begin
@@ -80,9 +79,8 @@ module tb_sequential_divider ();
   // Set input signals to zero before starting with new testcases
   task deactivate_signals;
   begin
-    tb_en = ENABLE_OFF;
-    tb_divider = INPUT_OFF;
-    tb_dividend = INPUT_OFF;
+    tb_en = INACTIVE_EN_VALUE;
+    tb_pb = INACTIVE_PB_VALUE;
   end
   endtask
 
@@ -109,12 +107,12 @@ module tb_sequential_divider ();
   begin
     tb_mismatch = 1'b0;
     tb_check    = 1'b1;
-    if(tb_expected_quotient == tb_quotient) begin // Check passed
+    if(tb_expected_pwm == tb_pwm) begin // Check passed
       $display("Correct output %s during %s test case.", check_tag, tb_test_case_name);
     end
     else begin // Check failed
       tb_mismatch = 1'b1;
-      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_quotient, tb_quotient);
+      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_pwm, tb_pwm);
     end
 
     // Wait some small amount of time so check pulse timing is visible on waves
@@ -124,14 +122,13 @@ module tb_sequential_divider ();
   endtask
 
   // DUT Portmap
-  sequential_divider DUT 
+  synth_top DUT 
   (
     .clk(tb_clk), 
-    .nrst(tb_nrst), 
-    .en(tb_en),
-    .divider(tb_divider),
-    .dividend(tb_dividend),
-    .quotient(tb_quotient)
+    .n_rst(tb_nrst), 
+    .en(tb_D),
+    .keypad_i(tb_pb),
+    .pwm_o(tb_pwm)
   );
 
   // Signal Dump
@@ -165,7 +162,7 @@ module tb_sequential_divider ();
     #(CLK_PERIOD * 0.5);
 
     // Check that internal state was correctly reset
-    tb_expected_quotient = RESET_OUTPUT_VALUE;
+    tb_expected_pwm = RESET_PWM_VALUE;
     check_output("after reset applied");
 
     // Check that the reset value is maintained during a clock cycle
@@ -181,75 +178,37 @@ module tb_sequential_divider ();
     check_output("after reset was released");
 
     // ************************************************************************
-    // Test Case 2: Simple Sequential Division
+    // Test Case 2: Low C Note
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("A4 Standard Division");
+    start_testcase("Low C");
+    tb_pb = 14'b000_000_000_000_01;
+    tb_en = 1'b1;
 
-    tb_dividend = 22000;
-    tb_divider = 22727; // A4 Standard Divider
-    
-    // Pulse tb_en
-    tb_en = 1;
-    #(CLK_PERIOD);
-    tb_en = 0;
-
-    // Wait for Division to complete
-    #(CLK_PERIOD * 11);
-
-    // Division 1 Check
-    tb_expected_quotient = 247;
-    check_output("after division #1 finishes");
-
-    // Pulse tb_en
-    tb_dividend = 22256;
-    tb_en = 1;
-    #(CLK_PERIOD);
-    tb_en = 0;
-
-    #(CLK_PERIOD * 5);
-    check_output("after starting division #2");
-
-    // Wait for Division to complete
-    #(CLK_PERIOD * 6);
-
-    // Division 2 Check
-    tb_expected_quotient = 250;
-    check_output("after division #2");
+    // No Checks
+    #(CLK_PERIOD * 38224)
 
     // ************************************************************************
-    // Test Case 3: Max and Min Division
+    // Test Case 3: E Note
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("A4 Max and Min Division");
+    start_testcase("A");
+    tb_pb = 14'b000_100_000_000_00;
+    tb_en = 1'b1;
 
-    tb_dividend = 22727;
-    tb_divider = 22727; // A4 Standard Divider
-    
-    // Pulse tb_en
-    tb_en = 1;
-    #(CLK_PERIOD);
-    tb_en = 0;
+    // No Checks
+    #(CLK_PERIOD * 22728)
 
-    // Wait for Division to complete
-    #(CLK_PERIOD * 11);
+    // ************************************************************************
+    // Test Case 4: High C Note
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("High C");
+    tb_pb = 14'b100_000_000_000_00;
+    tb_en = 1'b1;
 
-    // Division 1 Check
-    tb_expected_quotient = 255;
-    check_output("after max division");
-
-    // Pulse tb_en
-    tb_dividend = 0;
-    tb_en = 1;
-    #(CLK_PERIOD);
-    tb_en = 0;
-
-    // Wait for Division to complete
-    #(CLK_PERIOD * 11);
-
-    // Division 2 Check
-    tb_expected_quotient = 0;
-    check_output("after min division");
+    // No Checks
+    #(CLK_PERIOD * 19112)
 
     $display("Simulation complete");
     $stop;
