@@ -15,6 +15,5 @@ module top
   output logic txclk, rxclk,
   input  logic txready, rxready
 );
-
-
+  
 endmodule

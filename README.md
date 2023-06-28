@@ -47,7 +47,6 @@ Clock and nRst omitted from input lists.
   - Inputs: in
   - Outputs: out 
 
-
 ## Testbenching
 - tb_base.sv : Base test bench template for further adaptation.
 - tb_pwm.sv : Test bench for the pulse width modifier.
@@ -57,10 +56,11 @@ Clock and nRst omitted from input lists.
 Put all the GPIO pin numbers, i/o/io determination, and labels
 
 ## Supporting Equipment
-- Testing FPGA Prototype
-- 
+- FPGA Prototype: State machine testing
+- GTKWave: Waveform timing block testing
 
 ## RTL Diagrams
+
 All the stuff from the proposal goes here, obviously updated from the time you did the proposal to the final layout
 Include more than just block diagrams, including sub-block diagrams, state-transition diagrams, flowcharts, and timing diagrams
 
@@ -80,5 +80,5 @@ Add possible extensions here...
 <br><b>Requirements:</b> Transcript of Passing Testbench Cases for each tested module, Organized GTKWave showcase of passing test cases.
 <br><b>Notes:</b> Beautify GTKWave formatting for ease of demonstration.
 
-### Monday, July 3rd: Final Design Presentations
+### Wednesday, July 5th: Final Design Presentations
 
