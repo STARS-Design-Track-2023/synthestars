@@ -26,7 +26,6 @@ module tb_synth ();
   // Declare DUT Connection Signals
   logic   tb_clk;
   logic   tb_nrst;
-  logic   tb_en;
   logic   [14:0] tb_pb;
   logic   tb_pwm;
 
@@ -79,7 +78,6 @@ module tb_synth ();
   // Set input signals to zero before starting with new testcases
   task deactivate_signals;
   begin
-    tb_en = INACTIVE_EN_VALUE;
     tb_pb = INACTIVE_PB_VALUE;
   end
   endtask
@@ -125,9 +123,10 @@ module tb_synth ();
   synth_top DUT 
   (
     .clk(tb_clk), 
-    .n_rst(tb_nrst), 
-    .en(tb_D),
-    .keypad_i(tb_pb),
+    .NRST(tb_nrst),
+    .NOTES(tb_pb[12:0]),
+    .MODE(tb_pb[13]),
+    .OCTAVE(tb_pb[14]),
     .pwm_o(tb_pwm)
   );
 
