@@ -8,6 +8,7 @@ module mixer(input logic [11:0]n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12
 logic [11:0]max;
 logic [3:0]N_active;
 logic [12:0]active_notes;
+logic[11:0]final_sample;
 logic s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13;
 
 assign max = '1;
@@ -56,5 +57,5 @@ mixed_sample = mixed_sample > max ? max : mixed_sample;
 N_active = $countones(active_notes);
 end
 
-sequential_divider u1(.clk(clk), .Nrst(nRst), .en(en), .divider(N_active), .dividend(mixed_sample), .quotient(mixed_sample));
+sequential_divider u1(.clk(clk), .nRst(nRst), .en(en), .divider(N_active), .dividend(mixed_sample), .quotient(final_sample));
 endmodule
