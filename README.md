@@ -8,9 +8,9 @@
 * (TA) Aidan Prendergast
 
 ## 13-Channel Synthesizer
-The (insert kewl chip name) is a digital polyphonic synthesizer.
+The Synthia is a digital polyphonic synthesizer.
 With thirteen keys each representative of a single note in a standard octave,
-a wave type selection mode, and an octave swithcing mode, the (insert kewl chip name) 
+a wave type selection mode, and an octave swithcing mode, Synthia
 is the working product of our team's design.
 
 ## Base Source Files
@@ -58,7 +58,8 @@ Put all the GPIO pin numbers, i/o/io determination, and labels
 
 ## Supporting Equipment
 - Testing FPGA Prototype
-- 
+- GTKWave waveform pulse testing
+- External speakers 
 
 ## RTL Diagrams
 All the stuff from the proposal goes here, obviously updated from the time you did the proposal to the final layout
@@ -80,5 +81,5 @@ Add possible extensions here...
 <br><b>Requirements:</b> Transcript of Passing Testbench Cases for each tested module, Organized GTKWave showcase of passing test cases.
 <br><b>Notes:</b> Beautify GTKWave formatting for ease of demonstration.
 
-### Monday, July 3rd: Final Design Presentations
+### Monday, July 5th: Final Design Presentations
 
