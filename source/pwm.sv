@@ -10,8 +10,8 @@ module pwm(input logic clk, nrst, enable, input logic [7:0] mixed_sample,
     logic pwm;
 
     //Counter Flip-Flop
-    always_ff @( posedge clk, negedge nrst ) begin
-        if(!nrst)
+    always_ff @( posedge clk, posedge nrst ) begin
+        if(nrst)
             count = 0;
         else
             count = nxt_count;
@@ -29,8 +29,8 @@ module pwm(input logic clk, nrst, enable, input logic [7:0] mixed_sample,
     always_comb 
         pwm = (count < mixed_sample);
 
-    always_ff @(posedge clk, negedge nrst) begin
-        if(!nrst)
+    always_ff @(posedge clk, posedge nrst) begin
+        if(nrst)
             PWM_o = 0;
         else
             PWM_o = enable ? pwm : 0;

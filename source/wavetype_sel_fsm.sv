@@ -3,8 +3,8 @@ module wavetype_sel_fsm (input logic clk, nrst, wave_type, output logic [1:0]typ
 
 logic [1:0]next_q;
 
-always_ff @ (posedge clk, negedge nrst) begin
-if(nrst == 0) begin
+always_ff @ (posedge clk, posedge nrst) begin
+if(nrst) begin
     type_switch <= 2'b00;
 end
 else begin

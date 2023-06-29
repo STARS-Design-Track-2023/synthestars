@@ -20,8 +20,8 @@ module sequential_divider (
     typedef enum logic [2:0] {start, load, divide, done} state_t;
     logic [2:0] state, next_state;
 
-    always_ff @(posedge clk, negedge nRst) begin
-        if(nRst == 0) begin
+    always_ff @(posedge clk, posedge nRst) begin
+        if(nRst) begin
             state <= start;
             R <= 0;
             D <= 0;
