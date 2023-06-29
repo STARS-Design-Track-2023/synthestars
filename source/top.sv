@@ -25,43 +25,43 @@ keypad_encoder m0(.octave(pb[19]), .mode(pb[18]), .clk(hz12M), .octave_out(oct_d
 octave_FSM e0(.clk(hz12M), .nrst(reset), .oct_down(oct_down), .oct_switch(octave));
 wavetype_sel_fsm s0(.clk(hz12M), .nrst(reset), .wave_type(wave_next), .type_switch(wave_type));
 
-oscillator #(.COUNTS(90)) d1(.clk(hz12M), .nRst(reset), .enable(pb[0]), .oct_dwn(octave), .saw_wave(s1));
+oscillator #(.COUNTS(75)) d1(.clk(hz12M), .nRst(reset), .enable(pb[0]), .oct_dwn(octave), .saw_wave(s1));
 wave_shaper w1(.saw_in(s1), .wave_form(wave_type), .wave_out(n1));
 
-oscillator #(.COUNTS(85)) d2(.clk(hz12M), .nRst(reset), .enable(pb[1]), .oct_dwn(octave), .saw_wave(s2));
+oscillator #(.COUNTS(70)) d2(.clk(hz12M), .nRst(reset), .enable(pb[1]), .oct_dwn(octave), .saw_wave(s2));
 wave_shaper w2(.saw_in(s2), .wave_form(wave_type), .wave_out(n2));
 
-oscillator #(.COUNTS(80)) d3(.clk(hz12M), .nRst(reset), .enable(pb[2]), .oct_dwn(octave), .saw_wave(s3));
+oscillator #(.COUNTS(67)) d3(.clk(hz12M), .nRst(reset), .enable(pb[2]), .oct_dwn(octave), .saw_wave(s3));
 wave_shaper w3(.saw_in(s3), .wave_form(wave_type), .wave_out(n3));
 
-oscillator #(.COUNTS(76)) d4(.clk(hz12M), .nRst(reset), .enable(pb[3]), .oct_dwn(octave), .saw_wave(s4));
+oscillator #(.COUNTS(63)) d4(.clk(hz12M), .nRst(reset), .enable(pb[3]), .oct_dwn(octave), .saw_wave(s4));
 wave_shaper w4(.saw_in(s4), .wave_form(wave_type), .wave_out(n4));
 
-oscillator #(.COUNTS(71)) d5(.clk(hz12M), .nRst(reset), .enable(pb[4]), .oct_dwn(octave), .saw_wave(s5));
+oscillator #(.COUNTS(59)) d5(.clk(hz12M), .nRst(reset), .enable(pb[4]), .oct_dwn(octave), .saw_wave(s5));
 wave_shaper w5(.saw_in(s5), .wave_form(wave_type), .wave_out(n5));
 
-oscillator #(.COUNTS(67)) d6(.clk(hz12M), .nRst(reset), .enable(pb[5]), .oct_dwn(octave), .saw_wave(s6));
+oscillator #(.COUNTS(56)) d6(.clk(hz12M), .nRst(reset), .enable(pb[5]), .oct_dwn(octave), .saw_wave(s6));
 wave_shaper w6(.saw_in(s6), .wave_form(wave_type), .wave_out(n6));
 
-oscillator #(.COUNTS(63)) d7(.clk(hz12M), .nRst(reset), .enable(pb[6]), .oct_dwn(octave), .saw_wave(s7));
+oscillator #(.COUNTS(53)) d7(.clk(hz12M), .nRst(reset), .enable(pb[6]), .oct_dwn(octave), .saw_wave(s7));
 wave_shaper w7(.saw_in(s7), .wave_form(wave_type), .wave_out(n7));
 
-oscillator #(.COUNTS(60)) d8(.clk(hz12M), .nRst(reset), .enable(pb[7]), .oct_dwn(octave), .saw_wave(s8));
+oscillator #(.COUNTS(50)) d8(.clk(hz12M), .nRst(reset), .enable(pb[7]), .oct_dwn(octave), .saw_wave(s8));
 wave_shaper w8(.saw_in(s8), .wave_form(wave_type), .wave_out(n8));
 
-oscillator #(.COUNTS(57)) d9(.clk(hz12M), .nRst(reset), .enable(pb[8]), .oct_dwn(octave), .saw_wave(s9));
+oscillator #(.COUNTS(47)) d9(.clk(hz12M), .nRst(reset), .enable(pb[8]), .oct_dwn(octave), .saw_wave(s9));
 wave_shaper w9(.saw_in(s9), .wave_form(wave_type), .wave_out(n9));
 
-oscillator #(.COUNTS(53)) d10(.clk(hz12M), .nRst(reset), .enable(pb[9]), .oct_dwn(octave), .saw_wave(s10));
+oscillator #(.COUNTS(44)) d10(.clk(hz12M), .nRst(reset), .enable(pb[9]), .oct_dwn(octave), .saw_wave(s10));
 wave_shaper w10(.saw_in(s10), .wave_form(wave_type), .wave_out(n10));
 
-oscillator #(.COUNTS(50)) d11(.clk(hz12M), .nRst(reset), .enable(pb[10]), .oct_dwn(octave), .saw_wave(s11));
+oscillator #(.COUNTS(42)) d11(.clk(hz12M), .nRst(reset), .enable(pb[10]), .oct_dwn(octave), .saw_wave(s11));
 wave_shaper w11(.saw_in(s11), .wave_form(wave_type), .wave_out(n11));
 
-oscillator #(.COUNTS(48)) d12(.clk(hz12M), .nRst(reset), .enable(pb[11]), .oct_dwn(octave), .saw_wave(s12));
+oscillator #(.COUNTS(40)) d12(.clk(hz12M), .nRst(reset), .enable(pb[11]), .oct_dwn(octave), .saw_wave(s12));
 wave_shaper w12(.saw_in(s12), .wave_form(wave_type), .wave_out(n12));
 
-oscillator #(.COUNTS(45)) d13(.clk(hz12M), .nRst(reset), .enable(pb[12]), .oct_dwn(octave), .saw_wave(s13));
+oscillator #(.COUNTS(37)) d13(.clk(hz12M), .nRst(reset), .enable(pb[12]), .oct_dwn(octave), .saw_wave(s13));
 wave_shaper w13(.saw_in(s13), .wave_form(wave_type), .wave_out(n13));
 
 

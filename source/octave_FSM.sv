@@ -7,8 +7,8 @@ module octave_FSM (input logic clk, nrst, oct_down, output logic [1:0]oct_switch
 
 logic [1:0]next_q;
 
-always_ff @ (posedge clk, posedge nrst) begin
-if(nrst) begin
+always_ff @ (posedge clk, negedge nrst) begin
+if(!nrst) begin
     oct_switch <= 2'b00;
 end
 else begin
