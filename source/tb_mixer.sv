@@ -13,8 +13,8 @@ module tb_sequential_divider ();
 
   // Inactive Inputs and Reset Output Values
   localparam  ENABLE_OFF = 1'b0;
-  localparam  INPUT_OFF = 16'b1;
-  localparam  RESET_OUTPUT_VALUE = 8'b0;
+  localparam  INPUT_OFF = 104'b0;
+  localparam  RESET_SAMPLE_VALUE = 8'b0;
 
   // Declare Test Case Signals
   integer tb_test_case_num;
@@ -27,10 +27,12 @@ module tb_sequential_divider ();
   logic   tb_clk;
   logic   tb_nrst;
   logic   tb_en;
-  logic   [7:0] tb_divider;
+  logic   [7:0] tb_sample;
+  logic [7:0] tb_n1, tb_n2, tb_n3, tb_n4, tb_n5, tb_n6, tb_n7, 
+              tb_n8, tb_n9, tb_n10, tb_n11, tb_n12, tb_n13;
   
   // Declare the Test Bench Signals for Expected Results
-  logic [7:0] tb_expected_quotient;
+  logic [7:0] tb_expected_sample;
 
   // Clock generation block
   always begin
@@ -79,8 +81,7 @@ module tb_sequential_divider ();
   task deactivate_signals;
   begin
     tb_en = ENABLE_OFF;
-    tb_divider = INPUT_OFF;
-    tb_dividend = INPUT_OFF;
+    {tb_n1,tb_n2,tb_n3,tb_n4,tb_n5,tb_n6,tb_n7,tb_n8,tb_n9,tb_n10,tb_n11,tb_n12,tb_n13} = INPUT_OFF;
   end
   endtask
 
@@ -107,12 +108,12 @@ module tb_sequential_divider ();
   begin
     tb_mismatch = 1'b0;
     tb_check    = 1'b1;
-    if(tb_expected_quotient == tb_quotient) begin // Check passed
+    if(tb_expected_sample == tb_sample) begin // Check passed
       $display("Correct output %s during %s test case.", check_tag, tb_test_case_name);
     end
     else begin // Check failed
       tb_mismatch = 1'b1;
-      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_quotient, tb_quotient);
+      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_sample, tb_sample);
     end
 
     // Wait some small amount of time so check pulse timing is visible on waves
@@ -122,14 +123,24 @@ module tb_sequential_divider ();
   endtask
 
   // DUT Portmap
-  sequential_divider DUT 
+  mixer DUT 
   (
     .clk(tb_clk), 
     .nrst(tb_nrst), 
     .en(tb_en),
-    .divider(tb_divider),
-    .dividend(tb_dividend),
-    .quotient(tb_quotient)
+    .n1(tb_n1),
+    .n2(tb_n2),
+    .n3(tb_n3),
+    .n4(tb_n4),
+    .n5(tb_n5),
+    .n6(tb_n6),
+    .n7(tb_n7),
+    .n8(tb_n8),
+    .n9(tb_n9),
+    .n10(tb_n10),
+    .n11(tb_n11),
+    .n12(tb_n12),
+    .n13(tb_n13)
   );
 
   // Signal Dump
@@ -163,7 +174,7 @@ module tb_sequential_divider ();
     #(CLK_PERIOD * 0.5);
 
     // Check that internal state was correctly reset
-    tb_expected_quotient = RESET_OUTPUT_VALUE;
+    tb_expected_sample = RESET_SAMPLE_VALUE;
     check_output("after reset applied");
 
     // Check that the reset value is maintained during a clock cycle
@@ -179,13 +190,12 @@ module tb_sequential_divider ();
     check_output("after reset was released");
 
     // ************************************************************************
-    // Test Case 2: Simple Sequential Division
+    // Test Case 2: 1 Signal Mixed
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("A4 Standard Division");
+    start_testcase("One Signal Through Mixer");
 
-    tb_dividend = 22000;
-    tb_divider = 22727; // A4 Standard Divider
+    tb_n1 = 8'd56;
     
     // Pulse tb_en
     tb_en = 1;
@@ -195,34 +205,30 @@ module tb_sequential_divider ();
     // Wait for Division to complete
     #(CLK_PERIOD * 11);
 
-    // Division 1 Check
-    tb_expected_quotient = 247;
-    check_output("after division #1 finishes");
+    // Sample 1 Check
+    tb_expected_sample = 56;
+    check_output("after passing sample #1");
+
+    tb_n1 = 8'd0;
+    tb_n7 = 8'd87;
 
     // Pulse tb_en
-    tb_dividend = 22256;
     tb_en = 1;
     #(CLK_PERIOD);
     tb_en = 0;
 
-    #(CLK_PERIOD * 5);
-    check_output("after starting division #2");
-
-    // Wait for Division to complete
-    #(CLK_PERIOD * 6);
-
-    // Division 2 Check
-    tb_expected_quotient = 250;
-    check_output("after division #2");
+    #(CLK_PERIOD * 11);
+    check_output("after passing sample #2");
 
     // ************************************************************************
-    // Test Case 3: Max and Min Division
+    // Test Case 3: Three Signals Mixed
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("A4 Max and Min Division");
+    start_testcase("Three Mixed Signals");
 
-    tb_dividend = 22727;
-    tb_divider = 22727; // A4 Standard Divider
+    tb_n2 = 8'd56;
+    tb_n3 = 8'd67;
+    tb_n4 = 8'd78;
     
     // Pulse tb_en
     tb_en = 1;
@@ -232,12 +238,18 @@ module tb_sequential_divider ();
     // Wait for Division to complete
     #(CLK_PERIOD * 11);
 
-    // Division 1 Check
-    tb_expected_quotient = 255;
-    check_output("after max division");
+    // Sample 1 Check
+    tb_expected_sample = 8'd67;
+    check_output("after passing sample #1");
 
+    tb_n2 = 8'd0;
+    tb_n3 = 8'd0;
+    tb_n4 = 8'd0;
+    tb_n5 = 8'd128;
+    tb_n10 = 8'd192;
+    tb_n12 = 8'd252;
+    
     // Pulse tb_en
-    tb_dividend = 0;
     tb_en = 1;
     #(CLK_PERIOD);
     tb_en = 0;
@@ -245,9 +257,41 @@ module tb_sequential_divider ();
     // Wait for Division to complete
     #(CLK_PERIOD * 11);
 
-    // Division 2 Check
-    tb_expected_quotient = 0;
-    check_output("after min division");
+    // Sample 1 Check
+    tb_expected_sample = 190;
+    check_output("after passing sample #2");
+
+    // ************************************************************************
+    // Test Case 3: Thirteen Signals Mixed
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("Thirteen Mixed Signals");
+
+    tb_n1 = 8'd2;
+    tb_n2 = 8'd5;
+    tb_n3 = 8'd11;
+    tb_n4 = 8'd17;
+    tb_n5 = 8'd23;
+    tb_n6 = 8'd31;
+    tb_n7 = 8'd41;
+    tb_n8 = 8'd47;
+    tb_n9 = 8'd59;
+    tb_n10 = 8'd67;
+    tb_n11 = 8'd73;
+    tb_n12 = 8'd83;
+    tb_n13 = 8'd91;
+    
+    // Pulse tb_en
+    tb_en = 1;
+    #(CLK_PERIOD);
+    tb_en = 0;
+
+    // Wait for Division to complete
+    #(CLK_PERIOD * 11);
+
+    // Sample 1 Check
+    tb_expected_sample = 8'd42;
+    check_output("after passing sample #1");
 
     $display("Simulation complete");
     $stop;
