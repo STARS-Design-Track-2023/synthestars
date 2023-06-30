@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module tb_sequential_divider ();
+module tb_oscillator ();
 
   // 10MHz Clock Rate
   localparam CLK_PERIOD        = 100;
@@ -12,9 +12,8 @@ module tb_sequential_divider ();
   localparam  VALUE = 8'b0;
 
   // Inactive Inputs and Reset Output Values
-  localparam  ENABLE_OFF = 1'b0;
-  localparam  INPUT_OFF = 16'b1;
-  localparam  RESET_OUTPUT_VALUE = 8'b0;
+  localparam  INACTIVE_D_VALUE = 1'b0;
+  localparam  RESET_COUNT_VALUE = 16'b1;
 
   // Declare Test Case Signals
   integer tb_test_case_num;
@@ -24,15 +23,14 @@ module tb_sequential_divider ();
   logic   tb_check;
 
   // Declare DUT Connection Signals
-  logic   tb_clk;
-  logic   tb_nrst;
-  logic   tb_en;
-  logic   [15:0] tb_divider;
-  logic   [15:0] tb_dividend;
-  logic   [7:0]  tb_quotient;
+  logic tb_clk;
+  logic tb_nrst;
+  logic tb_en;
+  logic [15:0] tb_divider;
+  logic [15:0] tb_count;
 
   // Declare the Test Bench Signals for Expected Results
-  logic [7:0] tb_expected_quotient;
+  logic [15:0] tb_expected_count;
 
   // Clock generation block
   always begin
@@ -80,9 +78,8 @@ module tb_sequential_divider ();
   // Set input signals to zero before starting with new testcases
   task deactivate_signals;
   begin
-    tb_en = ENABLE_OFF;
-    tb_divider = INPUT_OFF;
-    tb_dividend = INPUT_OFF;
+    tb_divider = 16'd1;
+    tb_en = 1'b0;
   end
   endtask
 
@@ -109,12 +106,12 @@ module tb_sequential_divider ();
   begin
     tb_mismatch = 1'b0;
     tb_check    = 1'b1;
-    if(tb_expected_quotient == tb_quotient) begin // Check passed
+    if(tb_expected_count == tb_count) begin // Check passed
       $display("Correct output %s during %s test case.", check_tag, tb_test_case_name);
     end
     else begin // Check failed
       tb_mismatch = 1'b1;
-      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_quotient, tb_quotient);
+      $error("Incorrect output %s during %s test case. \nExpected %h, got %h.", check_tag, tb_test_case_name, tb_expected_count, tb_count);
     end
 
     // Wait some small amount of time so check pulse timing is visible on waves
@@ -124,14 +121,13 @@ module tb_sequential_divider ();
   endtask
 
   // DUT Portmap
-  sequential_divider DUT 
+  oscillator DUT 
   (
     .clk(tb_clk), 
     .nrst(tb_nrst), 
     .en(tb_en),
     .divider(tb_divider),
-    .dividend(tb_dividend),
-    .quotient(tb_quotient)
+    .count(tb_count)
   );
 
   // Signal Dump
@@ -145,6 +141,10 @@ module tb_sequential_divider ();
     // Initialize all of the test inputs and test environment
     deactivate_signals();
     start_dut();
+
+    // Initialize module-task-specific test cases
+    // tb_stream_check_tag = "N/A";
+    // tb_bit_num          = -1;   // Initialize to invalid number
     
     // Wait some time before starting first test case
     #(0.1);
@@ -165,7 +165,7 @@ module tb_sequential_divider ();
     #(CLK_PERIOD * 0.5);
 
     // Check that internal state was correctly reset
-    tb_expected_quotient = RESET_OUTPUT_VALUE;
+    tb_expected_count = RESET_COUNT_VALUE;
     check_output("after reset applied");
 
     // Check that the reset value is maintained during a clock cycle
@@ -181,75 +181,52 @@ module tb_sequential_divider ();
     check_output("after reset was released");
 
     // ************************************************************************
-    // Test Case 2: Simple Sequential Division
+    // Test Case 2: A4 Divider
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("A4 Standard Division");
+    start_testcase("A4 Divider");
 
-    tb_dividend = 22000;
-    tb_divider = 22727; // A4 Standard Divider
-    
-    // Pulse tb_en
-    tb_en = 1;
+    // Apply Stimulus
+    tb_divider = 16'd22727;
+    tb_en = 1'b1;
+
+    // Count by 1
     #(CLK_PERIOD);
-    tb_en = 0;
+    tb_expected_count = 16'd2;
+    check_output("after 1 cycle");
 
-    // Wait for Division to complete
-    #(CLK_PERIOD * 11);
+    // Visual inspection of clock rollover
+    #(CLK_PERIOD * 22725);
+    tb_expected_count = 16'd22727;
+    check_output("after 22726 cycles");
 
-    // Division 1 Check
-    tb_expected_quotient = 247;
-    check_output("after division #1 finishes");
-
-    // Pulse tb_en
-    tb_dividend = 22256;
-    tb_en = 1;
     #(CLK_PERIOD);
-    tb_en = 0;
-
-    #(CLK_PERIOD * 5);
-    check_output("after starting division #2");
-
-    // Wait for Division to complete
-    #(CLK_PERIOD * 6);
-
-    // Division 2 Check
-    tb_expected_quotient = 250;
-    check_output("after division #2");
+    tb_expected_count = 16'd1;
+    check_output("after rollover");
 
     // ************************************************************************
-    // Test Case 3: Max and Min Division
+    // Test Case 2: Arbitrary Divider
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
-    start_testcase("A4 Max and Min Division");
+    start_testcase("Arbitrary Divider");
 
-    tb_dividend = 22727;
-    tb_divider = 22727; // A4 Standard Divider
-    
-    // Pulse tb_en
-    tb_en = 1;
+    // Apply Stimulus
+    tb_divider = 16'd30000;
+    tb_en = 1'b1;
+
+    // Count by 1
     #(CLK_PERIOD);
-    tb_en = 0;
+    tb_expected_count = 16'd2;
+    check_output("after 1 cycle");
 
-    // Wait for Division to complete
-    #(CLK_PERIOD * 11);
+    // Visual inspection of clock rollover
+    #(CLK_PERIOD * 29998);
+    tb_expected_count = 16'd30000;
+    check_output("after 29999 cycles");
 
-    // Division 1 Check
-    tb_expected_quotient = 255;
-    check_output("after max division");
-
-    // Pulse tb_en
-    tb_dividend = 0;
-    tb_en = 1;
     #(CLK_PERIOD);
-    tb_en = 0;
-
-    // Wait for Division to complete
-    #(CLK_PERIOD * 11);
-
-    // Division 2 Check
-    tb_expected_quotient = 0;
-    check_output("after min division");
+    tb_expected_count = 16'd1;
+    check_output("after rollover");
 
     $display("Simulation complete");
     $stop;

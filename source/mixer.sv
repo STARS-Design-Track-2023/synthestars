@@ -1,4 +1,5 @@
 module mixer(
+<<<<<<< HEAD
     input logic [7:0] n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13,
     input logic [15:0] s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,
     input logic clk, nRst, en,

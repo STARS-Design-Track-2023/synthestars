@@ -73,5 +73,4 @@ pwm p0(.clk(hz12M), .nrst(reset), .enable(1'b1), .mixed_sample(mixed_sample), .P
 assign right[3:2] = octave;
 assign right[1:0] = wave_type;
 
-
 endmodule
