@@ -15,5 +15,7 @@ module top
   output logic txclk, rxclk,
   input  logic txready, rxready
 );
-  
+
+Synthia d1(.pb(pb[12:0]), .clk(hz12M), .reset(reset), .modes(pb[13]), .octaves(pb[14]), .PWM_o(left[7]));
+
 endmodule
