@@ -181,33 +181,84 @@ module tb_synth ();
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
     start_testcase("Low C");
-    tb_pb = 14'b000_000_000_000_01;
+    tb_pb = 15'b00_000_000_000_000_1;
     tb_en = 1'b1;
 
     // No Checks
-    #(CLK_PERIOD * 38224)
+    #(CLK_PERIOD * 38224);
 
     // ************************************************************************
     // Test Case 3: E Note
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
     start_testcase("A");
-    tb_pb = 14'b000_100_000_000_00;
+    tb_pb = 15'b00_000_100_000_000_0;
     tb_en = 1'b1;
 
     // No Checks
-    #(CLK_PERIOD * 22728)
+    #(CLK_PERIOD * 22728);
 
     // ************************************************************************
     // Test Case 4: High C Note
     // ************************************************************************
     // Start Testcase, Task finishes at Negedge
     start_testcase("High C");
-    tb_pb = 14'b100_000_000_000_00;
+    tb_pb = 15'b00_100_000_000_000_0;
     tb_en = 1'b1;
 
     // No Checks
-    #(CLK_PERIOD * 19112)
+    #(CLK_PERIOD * 19112);
+
+    // ************************************************************************
+    // Test Case 5: Tri Wave
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("Tri Wave");
+    tb_pb = 15'b01_000_000_000_000_0; // Change Modes
+    tb_en = 1'b1;
+    #(CLK_PERIOD);
+    tb_pb = 15'b00_100_000_000_000_0; // High C
+
+    // No Checks
+    #(CLK_PERIOD * 19112);
+
+    // ************************************************************************
+    // Test Case 6: Square Wave
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("Square Wave");
+    
+    tb_pb = 15'b01_000_000_000_000_0; // Change Modes
+    tb_en = 1'b1;
+    #(CLK_PERIOD);
+    tb_pb = 15'b00_000_000_000_000_0; // Off
+    #(CLK_PERIOD);
+    tb_pb = 15'b01_000_000_000_000_0; // Change Modes
+    #(CLK_PERIOD);
+    tb_pb = 15'b00_000_000_000_000_0; // Off
+    #(CLK_PERIOD);
+    tb_pb = 15'b01_000_000_000_000_0; // Change Modes
+    #(CLK_PERIOD);
+    tb_pb = 15'b00_100_000_000_000_0; // High C
+
+    // No Checks
+    #(CLK_PERIOD * 19112);
+
+    // ************************************************************************
+    // Test Case 7: Octave Switching
+    // ************************************************************************
+    // Start Testcase, Task finishes at Negedge
+    start_testcase("High C octave down");
+    
+    tb_pb = 15'b10_000_000_000_000_0; // Switch Octave
+    tb_en = 1'b1;
+    #(CLK_PERIOD);
+    tb_pb = 15'b00_000_000_000_000_0; // Off
+    #(CLK_PERIOD);
+    tb_pb = 15'b00_100_000_000_000_0; // High C octave Down
+
+    // No Checks
+    #(CLK_PERIOD * 38223);
 
     $display("Simulation complete");
     $stop;
