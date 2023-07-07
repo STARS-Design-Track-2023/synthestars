@@ -53,11 +53,17 @@ Clock and nRst omitted from input lists.
 - tb_sequential_divider.sv : Test bench for the sequential divider.
 
 ## Pin Layout
-Put all the GPIO pin numbers, i/o/io determination, and labels
+- GPIO (IN)  0-12: Note Pins (C4 to C5)
+- GPIO (IN)  13: Mode Selector
+- GPIO (IN)  14: Octave Selector
+- GPIO (OUT) 15: PWM Output
+- GPIO (NC)  16-33: Not Connected 
 
 ## Supporting Equipment
 - Testing FPGA Prototype
-- 
+- Audio Amplifier
+- Low Pass Filter
+- Speaker
 
 ## RTL Diagrams
 All the stuff from the proposal goes here, obviously updated from the time you did the proposal to the final layout
